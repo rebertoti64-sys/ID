@@ -89,16 +89,19 @@ copyBtn.addEventListener('click', () => {
         alert('Ошибка копирования: ' + err);
     });
 });
-// === Генерация QR-кода ===
+// === Генерация QR-кода через QuiRks (qrious) ===
 const qrcodeContainer = document.getElementById('qrcode');
 if (qrcodeContainer) {
-    const siteUrl = window.location.href; // Текущий URL: https://rebertoti64-sys.github.io/my-site
-    new QRCode(qrcodeContainer, {
-        text: siteUrl,
-        width: 180,
-        height: 180,
-        colorDark: "#4a6fa5",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H // Высокая надёжность
+    const canvas = document.createElement('canvas');
+    qrcodeContainer.innerHTML = ''; // Очистим
+    qrcodeContainer.appendChild(canvas);
+
+    const qr = new QRious({
+        element: canvas,
+        value: window.location.href,
+        size: 180,
+        level: 'H',
+        background: '#fff',
+        foreground: '#4a6fa5'
     });
 }
