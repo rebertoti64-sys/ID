@@ -121,3 +121,21 @@ document.addEventListener('click', (e) => {
         sidebar.classList.remove('active');
     }
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (!menuToggle || !sidebar) {
+        console.error('Элементы меню не найдены');
+        return;
+    }
+
+    console.log('Кнопка найдена:', menuToggle);
+    console.log('Сайдбар найден:', sidebar);
+
+    menuToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Клик по кнопке меню!');
+        sidebar.classList.toggle('active');
+    });
+});
