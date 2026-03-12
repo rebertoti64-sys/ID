@@ -19,7 +19,17 @@
 
         <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
         <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
-    </div>
+        
+    <div class="sidebar-section">
+    <h4>📘 Нормативы</h4>
+    <ul class="gost-list">
+        <li><a href="#puе" onclick="showPUERules(); return false;">ПУЭ (Правила устройства электроустановок)</a></li>
+        <li><a href="#gost-50571" onclick="showGOST50571(); return false;">ГОСТ Р 50571 (Электроустановки зданий)</a></li>
+        <li><a href="#gost-2.702" onclick="showGOST2702(); return false;">ГОСТ 2.702-2011 (Схемы электрические)</a></li>
+        <li><a href="#gost-12.1.004" onclick="showGOST121004(); return false;">ГОСТ 12.1.004 (Пожарная безопасность)</a></li>
+        <li><a href="#gost-r-50571.5.52" onclick="showGOST50571_5_52(); return false;">ГОСТ Р 50571.5.52 (Выбор кабелей)</a></li>
+    </ul>
+</div>
 
     <!-- Кнопка для открытия меню -->
     <button class="open-btn" onclick="openSidebar()">☰ Меню</button>
@@ -56,5 +66,36 @@
     
     <!-- Твой скрипт -->
     <script src="script.js"></script>
+    <button id="schemes-btn">📋 Типовые схемы</button>
+<div id="schemes-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <h3>Типовые электрические схемы</h3>
+        <div class="scheme-item">
+            <h4>💡 Лампа с выключателем</h4>
+            <pre>
+Фаза → Выключатель → Лампа → Ноль
+            </pre>
+        </div>
+        <div class="scheme-item">
+            <h4>🔌 Розетка</h4>
+            <pre>
+Фаза → Автомат 16А → Розетка
+Ноль → Розетка
+Земля → Розетка
+            </pre>
+        </div>
+    </div><!-- Кнопка вызова ИИ -->
+<button id="ai-btn">🤖 Спросить у ИИ</button>
+
+<!-- Модальное окно -->
+<div id="ai-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeAIModal()">×</span>
+        <h3>💬 Электрик-помощник (ИИ)</h3>
+        <p>Опишите, что нужно подключить (например: "лампа, розетка, двигатель"):</p>
+        <textarea id="ai-input" rows="4" placeholder="Введите запрос..."></textarea>
+        <button onclick="askAI()" id="ai-submit">Задать вопрос</button>
+</div>
 </body>
 </html>

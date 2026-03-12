@@ -223,4 +223,145 @@ button:hover {
 .close-btn:hover {
     background-color: rgba(255, 0, 0, 0.1);
     color: #ff4757;
+}/* === Модальное окно === */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    color: var(--text);
+}
+
+.scheme-item {
+    margin: 15px 0;
+    padding: 10px;
+    background: var(--bg);
+    border-left: 4px solid var(--button-bg);
+    border-radius: 6px;
+}
+
+.scheme-item pre {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    margin: 10px 0 0;
+}/* === Модальное окно ИИ === */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    margin: 5% auto;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: var(--text);
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#ai-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    margin-bottom: 15px;
+    resize: vertical;
+}
+
+#ai-submit {
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#ai-submit:hover {
+    background-color: #3a5a8c;
+}
+
+.ai-response {
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--bg);
+    border-radius: 6px;
+    border-left: 4px solid #4a6fa5;
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+}/* === Список ГОСТов и ПУЭ === */
+.sidebar-section {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: var(--bg);
+    border-radius: 8px;
+    border-left: 4px solid var(--button-bg);
+}
+
+.sidebar-section h4 {
+    color: var(--button-bg);
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gost-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.gost-list li {
+    margin: 8px 0;
+}
+
+.gost-list a {
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.gost-list a:hover {
+    background-color: var(--card-bg);
+    color: var(--button-bg);
 }
