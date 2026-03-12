@@ -89,59 +89,67 @@ copyBtn.addEventListener('click', () => {
         alert('Ошибка копирования: ' + err);
     });
 });
-// === Генерация QR-кода через QuiRks (qrious) ===
-const qrcodeContainer = document.getElementById('qrcode');
-if (qrcodeContainer) {
-    const canvas = document.createElement('canvas');
-    qrcodeContainer.innerHTML = ''; // Очистим
-    qrcodeContainer.appendChild(canvas);
-
-    const qr = new QRious({
-        element: canvas,
-        value: window.location.href,
-        size: 180,
-        level: 'H',
-        background: '#fff',
-        foreground: '#4a6fa5'
-    });
-}
-// Сайдбар
-const menuToggle = document.getElementById('menu-toggle');
-const sidebar = document.querySelector('.sidebar');
-
-menuToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    sidebar.classList.toggle('active');
-});
-
-// Закрытие при клике мимо
-document.addEventListener('click', (e) => {
-    const isClickInside = sidebar.contains(e.target) || menuToggle.contains(e.target);
-    if (!isClickInside && sidebar.classList.contains('active')) {
-        sidebar.classList.remove('active');
-    }
-});
+// === Генерация QR-кода (если библиотека подключена) ===
 document.addEventListener('DOMContentLoaded', () => {
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
+    const qrcodeContainer = document.getElementById('qrcode');
+    if (qrcodeContainer && typeof QRious !== 'undefined') {
+        const canvas = document.createElement('canvas');
+        qrcodeContainer.innerHTML = '';
+        qrcodeContainer.appendChild(canvas);
 
-    if (!menuToggle || !sidebar) {
-        console.error('Элементы меню не найдены');
+        new QRious({
+            element: canvas,
+            value: window.location.href,
+            size: 180,
+            level: 'H',
+            background: '#fff',
+            foreground: '#4a6fa5'
+        });
+    } else if (qrcodeContainer) {
+        console.warn('QRious не загружена. Проверь подключение библиотеки.');
+    }
+
+    // === Сайдбар: открытие/закрытие ===
+    const sidebar = document.getElementById('sidebar');
+    const openBtn = document.querySelector('.open-btn');
+
+    if (!sidebar) {
+        console.error('❌ #sidebar не найден. Проверь HTML');
         return;
     }
 
-    console.log('Кнопка найдена:', menuToggle);
-    console.log('Сайдбар найден:', sidebar);
+    function openSidebar() {
+        sidebar.classList.add('open');
+        console.log('✅ Меню открыто');
+    }
 
-    menuToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log('Клик по кнопке меню!');
-        sidebar.classList.toggle('active');
-        function openSidebar() {
-    document.getElementById('sidebar').classList.add('open');
-}
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-}
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        console.log('✅ Меню закрыто');
+    }
+
+    if (openBtn) {
+        openBtn.onclick = openSidebar;
+    }
+
+    // Закрытие при клике мимо
+    document.addEventListener('click', (e) => {
+        const isClickInside = sidebar.contains(e.target);
+        const isClickOnButton = openBtn && openBtn.contains(e.target);
+
+        if (!isClickInside && !isClickOnButton && sidebar.classList.contains('open')) {
+            closeSidebar();
+        }
     });
+
+    // === Пример действий ===
+    window.showProfile = () => {
+        alert('👤 Здесь будет профиль');
+        closeSidebar();
+    };
+
+    window.showSettings = () => {
+        alert('⚙️ Настройки');
+        closeSidebar();
+    };
 });
