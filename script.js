@@ -105,33 +105,19 @@ if (qrcodeContainer) {
         foreground: '#4a6fa5'
     });
 }
-// === Сайдбар: открытие/закрытие меню ===
+// Сайдбар
 const menuToggle = document.getElementById('menu-toggle');
-const sidebarMenu = document.getElementById('sidebar-menu');
+const sidebar = document.querySelector('.sidebar');
 
 menuToggle.addEventListener('click', (e) => {
     e.preventDefault();
-    document.querySelector('.sidebar').classList.toggle('active');
+    sidebar.classList.toggle('active');
 });
 
-// Закрытие меню при клике вне его
+// Закрытие при клике мимо
 document.addEventListener('click', (e) => {
-    const sidebar = document.querySelector('.sidebar');
-    const isClickInsideSidebar = sidebar.contains(e.target);
-    const isClickOnToggle = menuToggle.contains(e.target);
-
-    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active')) {
+    const isClickInside = sidebar.contains(e.target) || menuToggle.contains(e.target);
+    if (!isClickInside && sidebar.classList.contains('active')) {
         sidebar.classList.remove('active');
     }
-});
-
-// Заглушка для кнопок
-document.getElementById('profile-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('👤 Здесь будет профиль');
-});
-
-document.getElementById('settings-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('⚙️ Здесь будут настройки');
 });
