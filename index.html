@@ -95,18 +95,25 @@
         </div>
     </div>
 
-    <!-- Модальное окно: ИИ -->
-    <div id="ai-modal" class="modal">
-        <div class="modal-content">
+    <!-- Модальное окно: ИИ-чат -->
+<div id="ai-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>💬 ЭлектроБот</h3>
             <span class="close-btn" onclick="closeAIModal()">×</span>
-            <h3>💬 Электрик-помощник (ИИ)</h3>
-            <p>Опишите, что нужно подключить (например: "лампа, розетка, двигатель"):</p>
-            <textarea id="ai-input" rows="4" placeholder="Введите запрос..."></textarea>
-            <button onclick="askAI()" id="ai-submit">Задать вопрос</button>
-            <div id="ai-response" class="ai-response"></div>
+        </div>
+        <div id="ai-chat" class="ai-chat">
+            <!-- Сообщения будут здесь -->
+            <div class="bot-message">
+                Привет! Я — твой электрик-помощник. Напиши, что нужно подключить или какой ГОСТ интересует.
+            </div>
+        </div>
+        <div class="ai-input-area">
+            <textarea id="ai-input" rows="2" placeholder="Введите вопрос..."></textarea>
+            <button onclick="askAI()" id="ai-submit">📤 Отправить</button>
         </div>
     </div>
-
+</div>
     <!-- Подключение скриптов -->
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
     <script src="script.js"></script>

@@ -301,55 +301,105 @@ function showGOST50571_5_52() {
 👉 Официальный текст: https://docs.cntd.ru/document/1200092694`);
 }
 
-// === Функция ИИ ===
+// === Чат с ИИ ===
 function askAI() {
     const aiInput = document.getElementById('ai-input');
-    const aiResponse = document.getElementById('ai-response');
+    const chatBox = document.getElementById('ai-chat');
     const query = aiInput?.value.trim();
 
-    if (!query) {
-        aiResponse.textContent = 'Введите запрос, например: "лампа с выключателем"';
-        return;
-    }
+    if (!query) return;
 
-    aiResponse.textContent = '🧠 ИИ думает...';
+    // Добавляем сообщение пользователя
+    const userMsg = document.createElement('div');
+    userMsg.className = 'user-message';
+    userMsg.textContent = query;
+    chatBox.appendChild(userMsg);
 
+    // Очищаем поле ввода
+    aiInput.value = '';
+
+    // Прокручиваем вниз
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Добавляем "печатающий" эффект
+    const botMsg = document.createElement('div');
+    botMsg.className = 'bot-message';
+    botMsg.textContent = '🧠 Пишу...';
+    chatBox.appendChild(botMsg);
+
+    // Прокрутка
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Ответ через задержку
     setTimeout(() => {
         const lower = query.toLowerCase();
-        let answer = "На основе ПУЭ и ГОСТ Р 50571:\n\n";
+        let answer = "";
 
         if (lower.includes('лампа') || lower.includes('свет')) {
-            answer += "💡 Схема подключения лампы:\n";
-            answer += "• Фаза → Выключатель → Лампа → Ноль\n";
-            answer += "• Сечение кабеля: 1.5 мм² (ПУЭ п. 7.1.35)\n";
-            answer += "• Автомат: 10 А (тип B)\n";
-            answer += "• Заземление не требуется\n\n";
+            answer = "💡 Вот схема подключения лампы:\n\n" +
+                     "• Фаза → Выключатель → Лампа → Ноль\n" +
+                     "• Сечение кабеля: 1.5 мм² (ПУЭ п. 7.1.35)\n" +
+                     "• Автомат: 10 А (тип B)\n" +
+                     "• Заземление не требуется (если не металлический корпус)";
+        }
+        else if (lower.includes('розетка')) {
+            answer = "🔌 Подключение розетки:\n\n" +
+                     "• Фаза → Автомат 16 А → Розетка\n" +
+                     "• Ноль → Розетка\n" +
+                     "• Земля → Розетка (обязательно! ПУЭ п. 1.7.144)\n" +
+                     "• Сечение: 2.5 мм² медный кабель";
+        }
+        else if (lower.includes('двигатель') || lower.includes('мотор')) {
+            answer = "⚙️ Подключение трёхфазного двигателя:\n\n" +
+                     "• Схема: «звезда» или «треугольник»\n" +
+                     "• Тепловое реле + магнитный пускатель\n" +
+                     "• Защита: автомат + УЗО 30 мА\n" +
+                     "• Сечение: 4 мм² (для 5.5 кВт)";
+        }
+        else if (lower.includes('заземление')) {
+            answer = "⚡ Заземление — обязательно!\n\n" +
+                     "• ПУЭ п. 1.7.5 — все металлические корпуса должны быть заземлены\n" +
+                     "• Используйте провод PE жёлто-зелёного цвета\n" +
+                     "• Сопротивление контура — не более 4 Ом (для 220 В)";
+        }
+        else if (lower.includes('узо') || lower.includes('узо')) {
+            answer = "🛡️ УЗО (устройство защитного отключения)\n\n" +
+                     "• Устанавливается для защиты от утечки тока\n" +
+                     "• Номинал: 30 мА для жилых помещений\n" +
+                     "• Обязательно в ванных, кухнях, наружных установках\n" +
+                     "• ПУЭ п. 7.1.73 — требование к установке УЗО";
+        }
+        else {
+            answer = "📌 Я не нашёл точного совпадения, но вот общие правила:\n\n" +
+                     "• Все цепи должны быть защищены автоматами.\n" +
+                     "• Заземление обязательно для розеток и металлических корпусов.\n" +
+                     "• Используйте кабель ВВГнг-LS.\n" +
+                     "• См. ПУЭ глава 7, ГОСТ Р 50571.";
         }
 
-        if (lower.includes('розетка')) {
-            answer += "🔌 Схема розеточной группы:\n";
-            answer += "• Фаза → Автомат 16 А → Розетка\n";
-            answer += "• Ноль → Розетка\n";
-            answer += "• Земля → Розетка (обязательно!)\n";
-            answer += "• Сечение: 2.5 мм²\n\n";
-        }
-
-        if (lower.includes('двигатель') || lower.includes('мотор')) {
-            answer += "⚙️ Подключение трёхфазного двигателя:\n";
-            answer += "• Схема: «звезда» или «треугольник»\n";
-            answer += "• Тепловое реле + пускатель\n";
-            answer += "• Защита: автомат + УЗО 30 мА\n";
-            answer += "• Сечение: 4 мм²\n\n";
-        }
-
-        if (answer === "На основе ПУЭ и ГОСТ Р 50571:\n\n") {
-            answer += "📌 Я не нашёл точного совпадения, но вот общие правила:\n";
-            answer += "• Все цепи должны быть защищены.\n";
-            answer += "• Заземление обязательно для розеток.\n";
-            answer += "• Используйте кабель ВВГнг-LS.\n";
-            answer += "• См. ПУЭ глава 7.";
-        }
-
-        aiResponse.textContent = answer;
+        botMsg.textContent = answer;
+        chatBox.scrollTop = chatBox.scrollHeight;
     }, 800);
+}
+
+// === Управление модальным окном ИИ ===
+const aiBtn = document.getElementById('ai-btn');
+const aiModal = document.getElementById('ai-modal');
+
+if (aiBtn && aiModal) {
+    aiBtn.addEventListener('click', () => {
+        aiModal.style.display = 'block';
+        document.getElementById('ai-input')?.focus();
+    });
+
+    window.closeAIModal = () => {
+        aiModal.style.display = 'none';
+    };
+
+    // Закрытие при клике вне
+    window.addEventListener('click', (e) => {
+        if (e.target === aiModal) {
+            closeAIModal();
+        }
+    });
 }
