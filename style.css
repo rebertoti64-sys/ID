@@ -164,10 +164,12 @@ button:hover {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 15px;
+    padding: 15px 15px 15px 50px; /* ← слева отступ, чтобы не под крестиком */
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border);
     color: var(--text);
+    position: relative;
+    z-index: 1;
 }
 
 .avatar {
@@ -200,5 +202,25 @@ button:hover {
 
 .close-btn {
     position: absolute;
-    top: 10px;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text);
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #ff4757;
 }
