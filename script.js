@@ -88,9 +88,8 @@ copyBtn.addEventListener('click', () => {
 });
 
 // === Глобальные функции для сайдбара ===
-let sidebar; // Будет инициализирован при загрузке
+let sidebar;
 
-// Эти функции должны быть глобальными, чтобы работать в onclick
 function openSidebar() {
     if (!sidebar) {
         console.error('❌ #sidebar не найден. Проверь HTML.');
@@ -108,7 +107,7 @@ function closeSidebar() {
 
 // === Инициализация после загрузки DOM ===
 document.addEventListener('DOMContentLoaded', () => {
-    sidebar = document.getElementById('sidebar'); // Теперь доступно в функциях
+    sidebar = document.getElementById('sidebar');
     const openBtn = document.querySelector('.open-btn');
 
     if (!sidebar) {
@@ -119,3 +118,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // Закрытие при клике мимо
     document.addEventListener('click', (e) => {
         const isClickInside = sidebar.contains(e.target);
+        const isClickOnButton = openBtn && openBtn.contains(e.target);
+
+        if (!isClickInside && !isClickOnButton && sidebar.classList.contains('open')) {
+            closeSidebar();
+        }
+    });
+
+    // === Генерация QR-кода ===
+    const qrcodeContainer = document.getElementById('qrcode');
+    if (qrcodeContainer && typeof QRious !== 'undefined') {
+        const canvas = document.createElement('canvas');
+        qrcodeContainer.innerHTML = '';
+        qrcodeContainer.appendChild(canvas);
+
+        new QRious({
+            element: canvas,
+            value: window.location.href,
+            size: 180,
+            level: 'H',
+            background: '#fff',
+            foreground: '#4a6fa5'
+        });
+    } else if (qrcodeContainer) {
+        console.warn('QRious не загружена. Проверь подключение библиотеки.');
+    }
+});
+
+// === Действия в меню ===
+function showProfile() {
+    alert('👤 Здесь будет профиль');
+    closeSidebar();
+}
+
+function showSettings() {
+    alert('⚙️ Настройки');
+    closeSidebar();
+}
