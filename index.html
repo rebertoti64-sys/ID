@@ -1,13 +1,4 @@
 <!DOCTYPE html>
-<!-- Меню -->
-<div class="sidebar">
-    <button id="menu-toggle" class="menu-toggle">☰ Меню</button>
-    <div class="sidebar-menu" id="sidebar-menu">
-        <a href="#" class="sidebar-item">👤 Профиль</a>
-        <a href="#" class="sidebar-item">⚙️ Настройки</a>
-    </div>
-</div>
-
 <!-- Остальной контент остаётся ниже -->
 <div class="container">
 <html lang="ru">
@@ -46,4 +37,22 @@
 
     <script src="script.js"></script>
 </body>
+<!-- Сайдбар -->
+<div class="sidebar" id="sidebar">
+    <button class="close-btn" onclick="closeSidebar()">×</button>
+    <h3>Меню</h3>
+    <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
+    <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
+</div>
+
+<!-- Кнопка для открытия меню -->
+<button class="open-btn" onclick="openSidebar()">☰ Меню</button>
+<!-- Меню -->
+<div class="sidebar">
+    <button id="menu-toggle" class="menu-toggle">☰ Меню</button>
+    <div class="sidebar-menu" id="sidebar-menu">
+        <a href="#" class="sidebar-item">👤 Профиль</a>
+        <a href="#" class="sidebar-item">⚙️ Настройки</a>
+    </div>
+</div>
 </html>
