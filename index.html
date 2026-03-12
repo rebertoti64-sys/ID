@@ -39,31 +39,29 @@
     <button class="open-btn" onclick="openSidebar()">☰ Меню</button>
 
     <!-- Основной контент -->
-    <div class="container">
-        <h1>🔐 ID-Портал</h1>
+<div class="container">
+    <h1>📘 ЭлектроСправка</h1>
+    <p>Справочник по ПУЭ, ГОСТам и электрическим схемам</p>
 
-        <div class="info-card">
-            <p><strong>Публичный IP:</strong> <span id="ip">Загрузка...</span></p>
-            <p><strong>Время:</strong> <span id="time">--:--:--</span></p>
-            <p><strong>Дата:</strong> <span id="date">Загрузка...</span></p>
-        </div>
-
-        <div class="info-card">
-            <h3>📱 Открой с телефона</h3>
-            <div id="qrcode"></div>
-        </div>
-
-        <div class="info-card">
-            <p><strong>Браузер:</strong> <span id="browser"></span></p>
-            <p><strong>ОС:</strong> <span id="os"></span></p>
-            <p><strong>Разрешение:</strong> <span id="resolution"></span></p>
-        </div>
-
-        <button id="btn">Показать мой ID</button>
-        <div id="user-info"></div>
-        <button id="copy-btn" style="display: none;">Скопировать ID</button>
-        <button id="theme-toggle">Сменить тему</button>
+    <div class="info-card">
+        <p><strong>Публичный IP:</strong> <span id="ip">Загрузка...</span></p>
+        <p><strong>Время:</strong> <span id="time">--:--:--</span></p>
+        <p><strong>Дата:</strong> <span id="date">Загрузка...</span></p>
     </div>
+
+    <div class="info-card">
+        <h3>📱 Открой с телефона</h3>
+        <div id="qrcode"></div>
+    </div>
+
+    <div class="info-card">
+        <p><strong>Браузер:</strong> <span id="browser"></span></p>
+        <p><strong>ОС:</strong> <span id="os"></span></p>
+        <p><strong>Разрешение:</strong> <span id="resolution"></span></p>
+    </div>
+
+    <button id="theme-toggle">Сменить тему</button>
+</div>
 
     <!-- Подключаем библиотеку QR-кода -->
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>

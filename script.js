@@ -63,30 +63,6 @@ function updateResolution() {
 window.addEventListener('resize', updateResolution);
 updateResolution();
 
-// === Работа с ID ===
-const btn = document.getElementById('btn');
-const userInfo = document.getElementById('user-info');
-const copyBtn = document.getElementById('copy-btn');
-
-const USER_ID = '81ca416fa38d1554a71344fb6ca8a5803937fed5c59e3e32040d2401f5935b19';
-
-btn.addEventListener('click', () => {
-    userInfo.textContent = 'Твой ID: ' + USER_ID;
-    userInfo.style.opacity = 1;
-    copyBtn.style.display = 'inline-block';
-});
-
-copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(USER_ID).then(() => {
-        copyBtn.textContent = 'Скопировано!';
-        setTimeout(() => {
-            copyBtn.textContent = 'Скопировать ID';
-        }, 2000);
-    }).catch(err => {
-        alert('Ошибка копирования: ' + err);
-    });
-});
-
 // === Глобальные функции для сайдбара ===
 let sidebar;
 
