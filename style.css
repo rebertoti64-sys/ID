@@ -130,7 +130,7 @@ button:hover {
     z-index: 9999; /* ← максимальный приоритет */
     overflow-y: auto;
 }.sidebar.active {
-    transform: translateX(0) !important;
+    left: translateX(0) !important;
 }.sidebar {
     border: 2px solid red !important;
     background-color: #fff !important;
@@ -175,4 +175,37 @@ button:hover {
     margin: 0;
     font-size: 18px;
     font-weight: 600;
+}/* === Сайдбар === */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: var(--card-bg);
+    border-right: 1px solid var(--border);
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    transition: left 0.3s ease;
+    z-index: 9999;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    left: 0 !important; /* ← ключевое! */
+}
+
+/* === Кнопка меню === */
+.open-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
 }
