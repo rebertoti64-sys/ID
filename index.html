@@ -34,13 +34,17 @@
         <button id="theme-toggle">Сменить тему</button>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.4.4/lib/qrcode.min.js"></script>
-
-    <script src="script.js"></script>
 </body>
 <!-- Сайдбар -->
 <div class="sidebar" id="sidebar">
     <button class="close-btn" onclick="closeSidebar()">×</button>
-    <h3>Меню</h3>
+
+    <!-- Аватар + имя -->
+    <div class="sidebar-header">
+        <img src="https://via.placeholder.com/50" alt="Аватар" class="avatar">
+        <h3>Reberto</h3>
+    </div>
+
     <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
     <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
 </div>
@@ -55,4 +59,6 @@
         <a href="#" class="sidebar-item">⚙️ Настройки</a>
     </div>
 </div>
-</html>
+</html>  
+<script src="script.js"></script>
+</body>

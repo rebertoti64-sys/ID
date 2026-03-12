@@ -137,5 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         console.log('Клик по кнопке меню!');
         sidebar.classList.toggle('active');
+        function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+}
     });
 });
