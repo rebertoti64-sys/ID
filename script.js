@@ -119,6 +119,107 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (qrcodeContainer) {
         console.warn('QRious не загружена. Проверь подключение библиотеки.');
     }
+
+    // === Модальное окно: типовые схемы ===
+    const schemesBtn = document.getElementById('schemes-btn');
+    const schemesModal = document.getElementById('schemes-modal');
+
+    if (schemesBtn && schemesModal) {
+        schemesBtn.addEventListener('click', () => {
+            schemesModal.style.display = 'block';
+        });
+
+        window.closeModal = () => {
+            schemesModal.style.display = 'none';
+        };
+
+        window.addEventListener('click', (e) => {
+            if (e.target === schemesModal) {
+                closeModal();
+            }
+        });
+    }
+
+    // === Модальное окно: ИИ ===
+    const aiBtn = document.getElementById('ai-btn');
+    const aiModal = document.getElementById('ai-modal');
+    const aiInput = document.getElementById('ai-input');
+    const aiResponse = document.getElementById('ai-response');
+
+    if (aiBtn && aiModal) {
+        aiBtn.addEventListener('click', () => {
+            aiModal.style.display = 'block';
+            aiInput.focus();
+        });
+
+        window.closeAIModal = () => {
+            aiModal.style.display = 'none';
+            aiResponse.textContent = '';
+            aiInput.value = '';
+        };
+
+        window.addEventListener('click', (e) => {
+            if (e.target === aiModal) {
+                closeAIModal();
+            }
+        });
+    }
+
+    // === Поиск по ГОСТам ===
+    const searchInput = document.getElementById('gost-search');
+    const gostList = document.getElementById('gost-list');
+    const items = gostList ? gostList.getElementsByTagName('li') : [];
+
+    if (searchInput && gostList) {
+        searchInput.addEventListener('input', () => {
+            const filter = searchInput.value.toLowerCase();
+
+            // Подсказки
+            const hints = {
+                'зуо': 'Наверное, вы имели в виду: УЗО (устройство защитного отключения)',
+                'заземление': 'ПУЭ п. 1.7.5 — обязательное заземление металлических корпусов',
+                'автомат': 'ПУЭ п. 3.1.5 — автомат должен защищать от перегрузки и КЗ',
+                'розетка': 'ПУЭ п. 7.1.22 — розетки в ванных должны быть защищены УЗО 10 мА',
+                'кабель': 'ГОСТ Р 50571.5.52 — выбор сечения кабеля по току',
+                'сечение': 'Для розеток — 2.5 мм², для освещения — 1.5 мм² (ПУЭ)',
+                'щит': 'ГОСТ 2.702-2011 — правила оформления схем щитов',
+                'схема': 'ГОСТ 2.702-2011 — обозначения на электрических схемах'
+            };
+
+            const hintBox = document.getElementById('search-hint');
+            if (!hintBox) {
+                const hint = document.createElement('div');
+                hint.id = 'search-hint';
+                hint.style.padding = '10px 15px';
+                hint.style.color = '#2196F3';
+                hint.style.fontSize = '14px';
+                hint.style.fontStyle = 'italic';
+                hint.style.display = 'none';
+                gostList.parentNode.insertBefore(hint, gostList);
+            }
+
+            const hintElement = document.getElementById('search-hint');
+            let foundHint = false;
+
+            for (const key in hints) {
+                if (filter.includes(key)) {
+                    hintElement.textContent = hints[key];
+                    hintElement.style.display = 'block';
+                    foundHint = true;
+                    break;
+                }
+            }
+            if (!foundHint) {
+                hintElement.style.display = 'none';
+            }
+
+            // Фильтр списка
+            Array.from(items).forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+    }
 });
 
 // === Действия в меню ===
@@ -130,103 +231,9 @@ function showProfile() {
 function showSettings() {
     alert('⚙️ Настройки');
     closeSidebar();
-}// === Модальное окно — схемы ===
-const schemesBtn = document.getElementById('schemes-btn');
-const schemesModal = document.getElementById('schemes-modal');
-
-if (schemesBtn && schemesModal) {
-    schemesBtn.addEventListener('click', () => {
-        schemesModal.style.display = 'block';
-    });
-
-    window.closeModal = () => {
-        schemesModal.style.display = 'none';
-    };
-
-    // Закрытие при клике вне
-    window.addEventListener('click', (e) => {
-        if (e.target === schemesModal) {
-            closeModal();
-        }
-    });
-}// === Управление модальным окном ИИ ===
-const aiBtn = document.getElementById('ai-btn');
-const aiModal = document.getElementById('ai-modal');
-const aiInput = document.getElementById('ai-input');
-const aiResponse = document.getElementById('ai-response');
-
-if (aiBtn && aiModal) {
-    aiBtn.addEventListener('click', () => {
-        aiModal.style.display = 'block';
-        aiInput.focus();
-    });
-
-    window.closeAIModal = () => {
-        aiModal.style.display = 'none';
-        aiResponse.textContent = '';
-        aiInput.value = '';
-    };
-
-    // Закрытие при клике вне
-    window.addEventListener('click', (e) => {
-        if (e.target === aiModal) {
-            closeAIModal();
-        }
-    });
 }
 
-// === Функция запроса к ИИ (демо-версия) ===
-window.askAI = () => {
-    const query = aiInput.value.trim();
-    if (!query) {
-        aiResponse.textContent = 'Введите запрос, например: "лампа с выключателем"';
-        return;
-    }
-
-    aiResponse.textContent = '🧠 ИИ думает...';
-
-    // Демо-ответ (в реальности здесь будет API)
-    setTimeout(() => {
-        const lower = query.toLowerCase();
-
-        let answer = "На основе ПУЭ и ГОСТ Р 50571:\n\n";
-
-        if (lower.includes('лампа') || lower.includes('свет')) {
-            answer += "💡 Схема подключения лампы:\n";
-            answer += "• Фаза → Выключатель → Лампа → Ноль\n";
-            answer += "• Сечение кабеля: 1.5 мм² (ПУЭ п. 7.1.35)\n";
-            answer += "• Автомат: 10 А (тип B)\n";
-            answer += "• Заземление не требуется (если не металлический корпус)\n\n";
-        }
-
-        if (lower.includes('розетка')) {
-            answer += "🔌 Схема розеточной группы:\n";
-            answer += "• Фаза → Автомат 16 А → Розетка\n";
-            answer += "• Ноль → Розетка\n";
-            answer += "• Земля → Розетка (обязательно! ПУЭ п. 1.7.144)\n";
-            answer += "• Сечение: 2.5 мм² медный кабель\n\n";
-        }
-
-        if (lower.includes('двигатель') || lower.includes('мотор')) {
-            answer += "⚙️ Подключение трёхфазного двигателя:\n";
-            answer += "• Схема: «звезда» или «треугольник»\n";
-            answer += "• Тепловое реле + магнитный пускатель\n";
-            answer += "• Защита: автомат по току + УЗО 30 мА\n";
-            answer += "• Сечение: 4 мм² (для 5.5 кВт)\n\n";
-        }
-
-        if (answer === "На основе ПУЭ и ГОСТ Р 50571:\n\n") {
-            answer += "📌 Я не нашёл точного совпадения, но вот общие правила:\n";
-            answer += "• Все цепи должны быть защищены автоматами.\n";
-            answer += "• Заземление обязательно для розеток и металлических корпусов.\n";
-            answer += "• Используйте кабель ВВГнг-LS.\n";
-            answer += "• См. ПУЭ глава 7, ГОСТ Р 50571.";
-        }
-
-        aiResponse.textContent = answer;
-    }, 1000);
-};// === Функции для отображения нормативов ===
-
+// === Функции ГОСТов ===
 function showPUERules() {
     alert(`📘 ПУЭ (Правила устройства электроустановок)
 
@@ -293,69 +300,56 @@ function showGOST50571_5_52() {
 
 👉 Официальный текст: https://docs.cntd.ru/document/1200092694`);
 }
-// === Поиск по нормативам ===
-function searchGOST() {
-    const input = document.getElementById('gost-search');
-    const filter = input.value.toLowerCase();
-    const list = document.getElementById('gost-list');
-    const items = list.getElementsByTagName('li');
 
-    // Ключевые слова → подсказки
-    const hints = {
-        'зуо': 'Наверное, вы имели в виду: УЗО (устройство защитного отключения)',
-        'заземление': 'ПУЭ п. 1.7.5 — обязательное заземление металлических корпусов',
-        'автомат': 'ПУЭ п. 3.1.5 — автомат должен защищать от перегрузки и КЗ',
-        'розетка': 'ПУЭ п. 7.1.22 — розетки в ванных должны быть защищены УЗО 10 мА',
-        'кабель': 'ГОСТ Р 50571.5.52 — выбор сечения кабеля по току',
-        'сечение': 'Для розеток — 2.5 мм², для освещения — 1.5 мм² (ПУЭ)',
-        'щит': 'ГОСТ 2.702-2011 — правила оформления схем щитов',
-        'схема': 'ГОСТ 2.702-2011 — обозначения на электрических схемах'
-    };
+// === Функция ИИ ===
+function askAI() {
+    const aiInput = document.getElementById('ai-input');
+    const aiResponse = document.getElementById('ai-response');
+    const query = aiInput?.value.trim();
 
-    // Показываем подсказку, если есть
-    const hintBox = document.getElementById('search-hint');
-    if (!hintBox) {
-        const hint = document.createElement('div');
-        hint.id = 'search-hint';
-        hint.style.padding = '10px 15px';
-        hint.style.color = '#2196F3';
-        hint.style.fontSize = '14px';
-        hint.style.fontStyle = 'italic';
-        hint.style.display = 'none';
-        list.parentNode.insertBefore(hint, list);
+    if (!query) {
+        aiResponse.textContent = 'Введите запрос, например: "лампа с выключателем"';
+        return;
     }
 
-    const hintElement = document.getElementById('search-hint');
+    aiResponse.textContent = '🧠 ИИ думает...';
 
-    let foundHint = false;
-    for (const key in hints) {
-        if (filter.includes(key)) {
-            hintElement.textContent = hints[key];
-            hintElement.style.display = 'block';
-            foundHint = true;
-            break;
+    setTimeout(() => {
+        const lower = query.toLowerCase();
+        let answer = "На основе ПУЭ и ГОСТ Р 50571:\n\n";
+
+        if (lower.includes('лампа') || lower.includes('свет')) {
+            answer += "💡 Схема подключения лампы:\n";
+            answer += "• Фаза → Выключатель → Лампа → Ноль\n";
+            answer += "• Сечение кабеля: 1.5 мм² (ПУЭ п. 7.1.35)\n";
+            answer += "• Автомат: 10 А (тип B)\n";
+            answer += "• Заземление не требуется\n\n";
         }
-    }
-    if (!foundHint) {
-        hintElement.style.display = 'none';
-    }
 
-    // Фильтрация списка
-    Array.from(items).forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (text.includes(filter)) {
-            item.style.display = '';
-        } else {
-            item.style.display = 'none';
+        if (lower.includes('розетка')) {
+            answer += "🔌 Схема розеточной группы:\n";
+            answer += "• Фаза → Автомат 16 А → Розетка\n";
+            answer += "• Ноль → Розетка\n";
+            answer += "• Земля → Розетка (обязательно!)\n";
+            answer += "• Сечение: 2.5 мм²\n\n";
         }
-    });
+
+        if (lower.includes('двигатель') || lower.includes('мотор')) {
+            answer += "⚙️ Подключение трёхфазного двигателя:\n";
+            answer += "• Схема: «звезда» или «треугольник»\n";
+            answer += "• Тепловое реле + пускатель\n";
+            answer += "• Защита: автомат + УЗО 30 мА\n";
+            answer += "• Сечение: 4 мм²\n\n";
+        }
+
+        if (answer === "На основе ПУЭ и ГОСТ Р 50571:\n\n") {
+            answer += "📌 Я не нашёл точного совпадения, но вот общие правила:\n";
+            answer += "• Все цепи должны быть защищены.\n";
+            answer += "• Заземление обязательно для розеток.\n";
+            answer += "• Используйте кабель ВВГнг-LS.\n";
+            answer += "• См. ПУЭ глава 7.";
+        }
+
+        aiResponse.textContent = answer;
+    }, 800);
 }
-
-// === Инициализация при загрузке ===
-document.addEventListener('DOMContentLoaded', () => {
-    // ... остальной код ...
-    // Убедимся, что #gost-list существует
-    if (document.getElementById('gost-list')) {
-        console.log('🔍 Поиск по ГОСТам загружен');
-    }
-});

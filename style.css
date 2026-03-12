@@ -164,7 +164,7 @@ button:hover {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 15px 15px 15px 50px; /* ← слева отступ, чтобы не под крестиком */
+    padding: 15px 15px 15px 50px; /* ← отступ слева */
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border);
     color: var(--text);
@@ -223,7 +223,9 @@ button:hover {
 .close-btn:hover {
     background-color: rgba(255, 0, 0, 0.1);
     color: #ff4757;
-}/* === Модальное окно === */
+}
+
+/* === Модальные окна (общие стили) === */
 .modal {
     display: none;
     position: fixed;
@@ -240,13 +242,16 @@ button:hover {
     margin: 5% auto;
     padding: 20px;
     border-radius: 12px;
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     position: relative;
     color: var(--text);
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
+/* === Модальное окно: типовые схемы === */
 .scheme-item {
     margin: 15px 0;
     padding: 10px;
@@ -262,32 +267,9 @@ button:hover {
     font-family: monospace;
     white-space: pre-wrap;
     margin: 10px 0 0;
-}/* === Модальное окно ИИ === */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 9998;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-content {
-    background-color: var(--card-bg);
-    margin: 5% auto;
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    color: var(--text);
-    position: relative;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
+/* === Модальное окно: ИИ === */
 #ai-input {
     width: 100%;
     padding: 10px;
@@ -324,7 +306,9 @@ button:hover {
     font-family: 'Segoe UI', sans-serif;
     font-size: 15px;
     color: var(--text);
-}/* === Список ГОСТов и ПУЭ === */
+}
+
+/* === Список ГОСТов и ПУЭ === */
 .sidebar-section {
     margin: 20px 0;
     padding: 15px;
@@ -364,7 +348,9 @@ button:hover {
 .gost-list a:hover {
     background-color: var(--card-bg);
     color: var(--button-bg);
-}/* === Поиск в сайдбаре === */
+}
+
+/* === Поиск в сайдбаре === */
 .sidebar-search {
     margin: 15px 0;
     padding: 0 15px;

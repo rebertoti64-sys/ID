@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Мой ID</title>
+    <title>📘 ЭлектроСправка</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,88 +16,99 @@
             <img src="https://http.cat/200" alt="Аватар" class="avatar">
             <h3>Reberto</h3>
         </div>
-        <!-- Поиск по нормативам -->
-<div class="sidebar-search">
-    <input type="text" id="gost-search" placeholder="🔍 Найти в ПУЭ / ГОСТ..." oninput="searchGOST()">
-</div>
 
+        <!-- Поиск по нормативам -->
+        <div class="sidebar-search">
+            <input type="text" id="gost-search" placeholder="🔍 Найти в ПУЭ / ГОСТ..." oninput="searchGOST()">
+        </div>
+
+        <!-- Основное меню -->
         <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
         <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
-        
-    <div class="sidebar-section">
-    <h4>📘 Нормативы</h4>
-    <ul class="gost-list">
-        <li><a href="#puе" onclick="showPUERules(); return false;">ПУЭ (Правила устройства электроустановок)</a></li>
-        <li><a href="#gost-50571" onclick="showGOST50571(); return false;">ГОСТ Р 50571 (Электроустановки зданий)</a></li>
-        <li><a href="#gost-2.702" onclick="showGOST2702(); return false;">ГОСТ 2.702-2011 (Схемы электрические)</a></li>
-        <li><a href="#gost-12.1.004" onclick="showGOST121004(); return false;">ГОСТ 12.1.004 (Пожарная безопасность)</a></li>
-        <li><a href="#gost-r-50571.5.52" onclick="showGOST50571_5_52(); return false;">ГОСТ Р 50571.5.52 (Выбор кабелей)</a></li>
-    </ul>
-</div>
 
-    <!-- Кнопка для открытия меню -->
+        <!-- Нормативы -->
+        <div class="sidebar-section">
+            <h4>📘 Нормативы</h4>
+            <ul class="gost-list" id="gost-list">
+                <li><a href="#pue" onclick="showPUERules(); return false;">ПУЭ (Правила устройства электроустановок)</a></li>
+                <li><a href="#gost-50571" onclick="showGOST50571(); return false;">ГОСТ Р 50571 (Электроустановки зданий)</a></li>
+                <li><a href="#gost-2.702" onclick="showGOST2702(); return false;">ГОСТ 2.702-2011 (Схемы электрические)</a></li>
+                <li><a href="#gost-12.1.004" onclick="showGOST121004(); return false;">ГОСТ 12.1.004 (Пожарная безопасность)</a></li>
+                <li><a href="#gost-r-50571.5.52" onclick="showGOST50571_5_52(); return false;">ГОСТ Р 50571.5.52 (Выбор кабелей)</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Кнопка открытия меню -->
     <button class="open-btn" onclick="openSidebar()">☰ Меню</button>
 
     <!-- Основной контент -->
-<div class="container">
-    <h1>📘 ЭлектроСправка</h1>
-    <p>Справочник по ПУЭ, ГОСТам и электрическим схемам</p>
+    <div class="container">
+        <h1>📘 ЭлектроСправка</h1>
+        <p>Справочник по ПУЭ, ГОСТам и электрическим схемам</p>
 
-    <div class="info-card">
-        <p><strong>Публичный IP:</strong> <span id="ip">Загрузка...</span></p>
-        <p><strong>Время:</strong> <span id="time">--:--:--</span></p>
-        <p><strong>Дата:</strong> <span id="date">Загрузка...</span></p>
-    </div>
-
-    <div class="info-card">
-        <h3>📱 Открой с телефона</h3>
-        <div id="qrcode"></div>
-    </div>
-
-    <div class="info-card">
-        <p><strong>Браузер:</strong> <span id="browser"></span></p>
-        <p><strong>ОС:</strong> <span id="os"></span></p>
-        <p><strong>Разрешение:</strong> <span id="resolution"></span></p>
-    </div>
-
-    <button id="theme-toggle">Сменить тему</button>
-</div>
-
-    <!-- Подключаем библиотеку QR-кода -->
-    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-    
-    <!-- Твой скрипт -->
-    <script src="script.js"></script>
-    <button id="schemes-btn">📋 Типовые схемы</button>
-<div id="schemes-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">×</span>
-        <h3>Типовые электрические схемы</h3>
-        <div class="scheme-item">
-            <h4>💡 Лампа с выключателем</h4>
-            <pre>
-Фаза → Выключатель → Лампа → Ноль
-            </pre>
+        <div class="info-card">
+            <p><strong>Публичный IP:</strong> <span id="ip">Загрузка...</span></p>
+            <p><strong>Время:</strong> <span id="time">--:--:--</span></p>
+            <p><strong>Дата:</strong> <span id="date">Загрузка...</span></p>
         </div>
-        <div class="scheme-item">
-            <h4>🔌 Розетка</h4>
-            <pre>
+
+        <div class="info-card">
+            <h3>📱 Открой с телефона</h3>
+            <div id="qrcode"></div>
+        </div>
+
+        <div class="info-card">
+            <p><strong>Браузер:</strong> <span id="browser"></span></p>
+            <p><strong>ОС:</strong> <span id="os"></span></p>
+            <p><strong>Разрешение:</strong> <span id="resolution"></span></p>
+        </div>
+
+        <button id="theme-toggle">Сменить тему</button>
+
+        <!-- Кнопка типовых схем -->
+        <button id="schemes-btn">📋 Типовые схемы</button>
+
+        <!-- Кнопка ИИ -->
+        <button id="ai-btn">🤖 Спросить у ИИ</button>
+    </div>
+
+    <!-- Модальное окно: типовые схемы -->
+    <div id="schemes-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <h3>Типовые электрические схемы</h3>
+            <div class="scheme-item">
+                <h4>💡 Лампа с выключателем</h4>
+                <pre>
+Фаза → Выключатель → Лампа → Ноль
+                </pre>
+            </div>
+            <div class="scheme-item">
+                <h4>🔌 Розетка</h4>
+                <pre>
 Фаза → Автомат 16А → Розетка
 Ноль → Розетка
 Земля → Розетка
-            </pre>
+                </pre>
+            </div>
         </div>
-    </div><!-- Кнопка вызова ИИ -->
-<button id="ai-btn">🤖 Спросить у ИИ</button>
+    </div>
 
-<!-- Модальное окно -->
-<div id="ai-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeAIModal()">×</span>
-        <h3>💬 Электрик-помощник (ИИ)</h3>
-        <p>Опишите, что нужно подключить (например: "лампа, розетка, двигатель"):</p>
-        <textarea id="ai-input" rows="4" placeholder="Введите запрос..."></textarea>
-        <button onclick="askAI()" id="ai-submit">Задать вопрос</button>
-</div>
+    <!-- Модальное окно: ИИ -->
+    <div id="ai-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAIModal()">×</span>
+            <h3>💬 Электрик-помощник (ИИ)</h3>
+            <p>Опишите, что нужно подключить (например: "лампа, розетка, двигатель"):</p>
+            <textarea id="ai-input" rows="4" placeholder="Введите запрос..."></textarea>
+            <button onclick="askAI()" id="ai-submit">Задать вопрос</button>
+            <div id="ai-response" class="ai-response"></div>
+        </div>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
