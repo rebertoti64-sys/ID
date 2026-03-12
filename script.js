@@ -68,17 +68,14 @@ const btn = document.getElementById('btn');
 const userInfo = document.getElementById('user-info');
 const copyBtn = document.getElementById('copy-btn');
 
-// Здесь можно подставить настоящий ID или оставить заглушку
 const USER_ID = '81ca416fa38d1554a71344fb6ca8a5803937fed5c59e3e32040d2401f5935b19';
 
 btn.addEventListener('click', () => {
     userInfo.textContent = 'Твой ID: ' + USER_ID;
     userInfo.style.opacity = 1;
-
     copyBtn.style.display = 'inline-block';
 });
 
-// Копирование ID
 copyBtn.addEventListener('click', () => {
     navigator.clipboard.writeText(USER_ID).then(() => {
         copyBtn.textContent = 'Скопировано!';
@@ -89,28 +86,29 @@ copyBtn.addEventListener('click', () => {
         alert('Ошибка копирования: ' + err);
     });
 });
-// === Генерация QR-кода (если библиотека подключена) ===
-document.addEventListener('DOMContentLoaded', () => {
-    const qrcodeContainer = document.getElementById('qrcode');
-    if (qrcodeContainer && typeof QRious !== 'undefined') {
-        const canvas = document.createElement('canvas');
-        qrcodeContainer.innerHTML = '';
-        qrcodeContainer.appendChild(canvas);
 
-        new QRious({
-            element: canvas,
-            value: window.location.href,
-            size: 180,
-            level: 'H',
-            background: '#fff',
-            foreground: '#4a6fa5'
-        });
-    } else if (qrcodeContainer) {
-        console.warn('QRious не загружена. Проверь подключение библиотеки.');
+// === Глобальные функции для сайдбара ===
+let sidebar; // Будет инициализирован при загрузке
+
+// Эти функции должны быть глобальными, чтобы работать в onclick
+function openSidebar() {
+    if (!sidebar) {
+        console.error('❌ #sidebar не найден. Проверь HTML.');
+        return;
     }
+    sidebar.classList.add('open');
+    console.log('✅ Меню открыто');
+}
 
-    // === Сайдбар: открытие/закрытие ===
-    const sidebar = document.getElementById('sidebar');
+function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    console.log('✅ Меню закрыто');
+}
+
+// === Инициализация после загрузки DOM ===
+document.addEventListener('DOMContentLoaded', () => {
+    sidebar = document.getElementById('sidebar'); // Теперь доступно в функциях
     const openBtn = document.querySelector('.open-btn');
 
     if (!sidebar) {
@@ -118,38 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    function openSidebar() {
-        sidebar.classList.add('open');
-        console.log('✅ Меню открыто');
-    }
-
-    function closeSidebar() {
-        sidebar.classList.remove('open');
-        console.log('✅ Меню закрыто');
-    }
-
-    if (openBtn) {
-        openBtn.onclick = openSidebar;
-    }
-
     // Закрытие при клике мимо
     document.addEventListener('click', (e) => {
         const isClickInside = sidebar.contains(e.target);
-        const isClickOnButton = openBtn && openBtn.contains(e.target);
-
-        if (!isClickInside && !isClickOnButton && sidebar.classList.contains('open')) {
-            closeSidebar();
-        }
-    });
-
-    // === Пример действий ===
-    window.showProfile = () => {
-        alert('👤 Здесь будет профиль');
-        closeSidebar();
-    };
-
-    window.showSettings = () => {
-        alert('⚙️ Настройки');
-        closeSidebar();
-    };
-});

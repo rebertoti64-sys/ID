@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-</body>
-<!-- Остальной контент остаётся ниже -->
-<div class="container">
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
@@ -9,6 +6,25 @@
     <title>Мой ID</title>
     <link rel="stylesheet" href="style.css" />
 </head>
+<body>
+    <!-- Сайдбар -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="closeSidebar()">×</button>
+
+        <!-- Аватар + имя -->
+        <div class="sidebar-header">
+            <img src="https://picsum.photos/50" alt="Аватар" class="avatar">
+            <h3>Reberto</h3>
+        </div>
+
+        <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
+        <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
+    </div>
+
+    <!-- Кнопка для открытия меню -->
+    <button class="open-btn" onclick="openSidebar()">☰ Меню</button>
+
+    <!-- Основной контент -->
     <div class="container">
         <h1>🔐 ID-Портал</h1>
 
@@ -16,9 +32,11 @@
             <p><strong>Публичный IP:</strong> <span id="ip">Загрузка...</span></p>
             <p><strong>Время:</strong> <span id="time">--:--:--</span></p>
             <p><strong>Дата:</strong> <span id="date">Загрузка...</span></p>
-<div class="info-card">
-    <h3>📱 Открой с телефона</h3>
-    <div id="qrcode"></div>
+        </div>
+
+        <div class="info-card">
+            <h3>📱 Открой с телефона</h3>
+            <div id="qrcode"></div>
         </div>
 
         <div class="info-card">
@@ -30,35 +48,13 @@
         <button id="btn">Показать мой ID</button>
         <div id="user-info"></div>
         <button id="copy-btn" style="display: none;">Скопировать ID</button>
-
         <button id="theme-toggle">Сменить тему</button>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.4.4/lib/qrcode.min.js"></script>
-<!-- Сайдбар -->
-<div class="sidebar" id="sidebar">
-    <button class="close-btn" onclick="closeSidebar()">×</button>
 
-    <!-- Аватар + имя -->
-    <div class="sidebar-header">
-        <img src="https://via.placeholder.com/50" alt="Аватар" class="avatar">
-        <h3>Reberto</h3>
-    </div>
-
-    <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
-    <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
-</div>
-
-<!-- Кнопка для открытия меню -->
-<button class="open-btn" onclick="openSidebar()">☰ Меню</button>
-<!-- Меню -->
-<div class="sidebar">
-    <button id="menu-toggle" class="menu-toggle">☰ Меню</button>
-    <div class="sidebar-menu" id="sidebar-menu">
-        <a href="#" class="sidebar-item">👤 Профиль</a>
-        <a href="#" class="sidebar-item">⚙️ Настройки</a>
-    </div>
-</div> 
-<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-<script src="script.js"></script>
+    <!-- Подключаем библиотеку QR-кода -->
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    
+    <!-- Твой скрипт -->
+    <script src="script.js"></script>
 </body>
-</html> 
+</html>
