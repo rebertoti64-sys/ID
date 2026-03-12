@@ -317,3 +317,69 @@ function showGOST50571_5_52() {
 
 👉 Официальный текст: https://docs.cntd.ru/document/1200092694`);
 }
+// === Поиск по нормативам ===
+function searchGOST() {
+    const input = document.getElementById('gost-search');
+    const filter = input.value.toLowerCase();
+    const list = document.getElementById('gost-list');
+    const items = list.getElementsByTagName('li');
+
+    // Ключевые слова → подсказки
+    const hints = {
+        'зуо': 'Наверное, вы имели в виду: УЗО (устройство защитного отключения)',
+        'заземление': 'ПУЭ п. 1.7.5 — обязательное заземление металлических корпусов',
+        'автомат': 'ПУЭ п. 3.1.5 — автомат должен защищать от перегрузки и КЗ',
+        'розетка': 'ПУЭ п. 7.1.22 — розетки в ванных должны быть защищены УЗО 10 мА',
+        'кабель': 'ГОСТ Р 50571.5.52 — выбор сечения кабеля по току',
+        'сечение': 'Для розеток — 2.5 мм², для освещения — 1.5 мм² (ПУЭ)',
+        'щит': 'ГОСТ 2.702-2011 — правила оформления схем щитов',
+        'схема': 'ГОСТ 2.702-2011 — обозначения на электрических схемах'
+    };
+
+    // Показываем подсказку, если есть
+    const hintBox = document.getElementById('search-hint');
+    if (!hintBox) {
+        const hint = document.createElement('div');
+        hint.id = 'search-hint';
+        hint.style.padding = '10px 15px';
+        hint.style.color = '#2196F3';
+        hint.style.fontSize = '14px';
+        hint.style.fontStyle = 'italic';
+        hint.style.display = 'none';
+        list.parentNode.insertBefore(hint, list);
+    }
+
+    const hintElement = document.getElementById('search-hint');
+
+    let foundHint = false;
+    for (const key in hints) {
+        if (filter.includes(key)) {
+            hintElement.textContent = hints[key];
+            hintElement.style.display = 'block';
+            foundHint = true;
+            break;
+        }
+    }
+    if (!foundHint) {
+        hintElement.style.display = 'none';
+    }
+
+    // Фильтрация списка
+    Array.from(items).forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(filter)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// === Инициализация при загрузке ===
+document.addEventListener('DOMContentLoaded', () => {
+    // ... остальной код ...
+    // Убедимся, что #gost-list существует
+    if (document.getElementById('gost-list')) {
+        console.log('🔍 Поиск по ГОСТам загружен');
+    }
+});

@@ -364,4 +364,25 @@ button:hover {
 .gost-list a:hover {
     background-color: var(--card-bg);
     color: var(--button-bg);
+}/* === Поиск в сайдбаре === */
+.sidebar-search {
+    margin: 15px 0;
+    padding: 0 15px;
+}
+
+#gost-search {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+#gost-search:focus {
+    outline: none;
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
 }
