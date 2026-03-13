@@ -2,8 +2,9 @@
 console.log("👋 Привет! 😊");
 console.log("💡 Все данные загружаются динамически.");
 
-// === Переключение темы ===
+// === Основная инициализация после загрузки DOM ===
 document.addEventListener('DOMContentLoaded', () => {
+    // === Переключение темы ===
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
 
@@ -49,13 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === Генерация QR-кода ===
+    // === Генерация QR-кода в сайдбаре ===
     const sidebarQR = document.getElementById('sidebar-qrcode');
     if (sidebarQR && typeof QRious !== 'undefined') {
         const canvas = document.createElement('canvas');
         canvas.width = 120;
         canvas.height = 120;
         sidebarQR.appendChild(canvas);
+
         new QRious({
             element: canvas,
             value: window.location.href,
@@ -66,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === Модальное окно: схемы ===
+    // === Модальное окно: типовые схемы ===
     const schemesBtn = document.getElementById('schemes-btn');
     const schemesModal = document.getElementById('schemes-modal');
 
@@ -113,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Поиск по ГОСТам ===
     const searchInput = document.getElementById('gost-search');
     const gostList = document.getElementById('gost-list');
-    const items = gostList ? gostList.getElementsByTagName('li') : [];
+    const items = gostList ? Array.from(gostList.getElementsByTagName('li')) : [];
 
     if (searchInput && gostList) {
         searchInput.addEventListener('input', () => {
@@ -157,7 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 hintElement.style.display = 'none';
             }
 
-            Array.from(items).forEach(item => {
+            // Фильтр списка
+            items.forEach(item => {
                 const text = item.textContent.toLowerCase();
                 item.style.display = text.includes(filter) ? '' : 'none';
             });
@@ -183,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateProfile() {
         document.getElementById('profile-name').textContent = 'Reberto';
 
+        // Получаем IP
         fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
@@ -192,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('profile-ip').textContent = 'Не удалось';
             });
 
+        // Браузер
         const userAgent = navigator.userAgent;
         let browser = 'Chrome';
         if (userAgent.includes('Firefox')) browser = 'Firefox';
@@ -199,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (userAgent.includes('Edg')) browser = 'Edge';
         document.getElementById('profile-browser').textContent = browser;
 
+        // ОС
         let os = 'Windows';
         if (userAgent.includes('Mac')) os = 'macOS';
         else if (userAgent.includes('Linux')) os = 'Linux';
@@ -206,10 +212,14 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (userAgent.includes('iPhone')) os = 'iOS';
         document.getElementById('profile-os').textContent = os;
 
+        // Разрешение
         document.getElementById('profile-resolution').textContent = `${window.innerWidth} × ${window.innerHeight}`;
-        document.getElementById('profile-theme').textContent = 
-            document.body.getAttribute('data-theme') === 'dark' ? 'Тёмная' : 'Светлая';
 
+        // Тема
+        document.getElementById('profile-theme').textContent = 
+            body.getAttribute('data-theme') === 'dark' ? 'Тёмная' : 'Светлая';
+
+        // Обновляем историю ИИ
         updateAIHistory();
     }
 
@@ -217,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const history = JSON.parse(localStorage.getItem('aiHistory')) || [];
         const list = document.getElementById('ai-history');
         if (history.length === 0) {
-            list.innerHTML = '<li>Пока нет</li>';
+            list.innerHTML = '<li>Пока нет запросов</li>';
             return;
         }
         list.innerHTML = '';
@@ -238,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === Лента ===
+    // === Лента активности ===
     window.openPostModal = () => {
         const modal = document.createElement('div');
         modal.id = 'post-modal';
@@ -342,25 +352,85 @@ function askAI() {
             answer = "💡 Схема: Фаза → Выключатель → Лампа → Ноль\n• Кабель: 1.5 мм²\n• Автомат: 10 А";
         } else if (lower.includes('розетка')) {
             answer = "🔌 Розетка: Фаза → Автомат 16 А → Розетка\n• Ноль и Земля — напрямую\n• Обязательно УЗО 30 мА";
-        } else if (lower.includes('узо')) {
-            answer = "🛡️ УЗО — обязательно для розеток, ванных, кухонь\n• Номинал: 30 мА\n• ПУЭ п. 7.1.73";
+        } else if (lower.includes('двигатель')) {
+            answer = "⚙️ Трёхфазный двигатель: схема «звезда» или «треугольник», магнитный пускатель + тепловое реле";
+        } else if (lower.includes('заземление')) {
+            answer = "⚡ Заземление обязательно! PE — жёлто-зелёный провод. Сопротивление ≤ 4 Ом";
+        } else if (lower.includes('узо') || lower.includes('узо')) {
+            answer = "🛡️ УЗО 30 мА — обязательно для розеток, ванных, кухонь. ПУЭ п. 7.1.73";
         } else {
-            answer = "📌 Я помогу с ПУЭ, ГОСТами, схемами. Напиши: «розетка», «лампа», «УЗО»";
+            answer = "📌 Я помогу с ПУЭ, ГОСТами, схемами. Напиши: «розетка», «лампа», «УЗО», «схема двигателя»";
         }
 
         botMsg.textContent = answer;
         aiChat.scrollTop = aiChat.scrollHeight;
     }, 800);
 
+    // Сохраняем в историю
     saveToHistory(query);
 }
 
 // === Функции ГОСТОВ ===
-function showPUERules() { alert("📘 ПУЭ — подробности в модальном окне"); }
-function showGOST50571() { alert("📘 ГОСТ Р 50571 — подробности в модальном окне"); }
-function showGOST2702() { alert("📘 ГОСТ 2.702-2011 — подробности в модальном окне"); }
-function showGOST121004() { alert("📘 ГОСТ 12.1.004 — подробности в модальном окне"); }
-function showGOST50571_5_52() { alert("📘 ГОСТ Р 50571.5.52 — подробности в модальном окне"); }
+function showPUERules() {
+    alert(`📘 ПУЭ — Правила устройства электроустановок
+
+🔹 Глава 1.7 — Заземление
+• Все металлические корпуса должны быть заземлены (п. 1.7.5)
+• УЗО обязательно при >50 В (п. 1.7.79)
+
+🔹 Глава 3.1 — Защита
+• Автомат должен защищать от КЗ и перегрузки
+
+🔹 Глава 7.1 — Жилые здания
+• Розетки — через УЗО 30 мА
+• Сечение:
+   - Освещение: 1.5 мм²
+   - Розетки: 2.5 мм²
+   - Электроплита: 6 мм²`);
+}
+
+function showGOST50571() {
+    alert(`📘 ГОСТ Р 50571 — Электроустановки зданий
+
+🔹 Раздел 4-41: Защита от поражения током
+• УЗО 30 мА — для розеток до 32 А
+• Обязательно в ванных, наружных установках
+
+🔹 Раздел 5-52: Выбор кабелей
+• Допустимый ток зависит от сечения и способа прокладки`);
+}
+
+function showGOST2702() {
+    alert(`📘 ГОСТ 2.702-2011 — Электрические схемы
+
+🔹 Условные обозначения:
+• QF — автомат
+• KM — пускатель
+• FU — предохранитель
+• SB — кнопка
+• HL — лампа
+
+🔹 Правила:
+• Линии без разрывов
+• Соединение — точка, пересечение — без точки`);
+}
+
+function showGOST121004() {
+    alert(`📘 ГОСТ 12.1.004-91 — Пожарная безопасность
+
+• Запрещено использовать ПУНП, ПУГНП
+• Только негорючие кабели: ВВГнг-LS, NYM
+• В деревянных домах — кабель в металлической трубе`);
+}
+
+function showGOST50571_5_52() {
+    alert(`📘 ГОСТ Р 50571.5.52-2011 — Выбор кабелей
+
+• Минимальное сечение:
+   - Освещение: 1.5 мм²
+   - Розетки: 2.5 мм²
+• Расчёт по току и потере напряжения (не более 5%)`);
+}
 
 function showSettings() {
     alert('⚙️ Настройки скоро будут!');
