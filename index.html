@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
     <!-- Сайдбар -->
     <div class="sidebar" id="sidebar">
         <button class="close-btn" onclick="closeSidebar()">×</button>
@@ -17,39 +18,14 @@
             <h3>Reberto</h3>
         </div>
 
-        <!-- QR-код в сайдбаре -->
-        <div class="sidebar-section">
-            <h4>📱 Открой с телефона</h4>
-            <div id="sidebar-qrcode" style="text-align: center;"></div>
-        </div>
-
-        <!-- Поиск по нормативам -->
+        <!-- Поиск по ГОСТам -->
         <div class="sidebar-search">
-            <input type="text" id="gost-search" placeholder="🔍 Найти в ПУЭ / ГОСТ..." oninput="searchGOST()">
+            <input type="text" id="gost-search" placeholder="🔍 Найти в ПУЭ / ГОСТ...">
         </div>
 
         <!-- Основное меню -->
         <a href="#" class="sidebar-link" onclick="openProfileModal(); return false;">👤 Мой профиль</a>
         <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
-
-        <!-- Лента активности -->
-        <div class="sidebar-section">
-            <h4>📢 Лента сообщества</h4>
-            <button onclick="openPostModal()" style="
-                width: 100%;
-                background: var(--button-bg);
-                color: white;
-                border: none;
-                padding: 8px;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 14px;
-                margin-bottom: 10px;
-            ">➕ Опубликовать</button>
-            <div id="feed-container">
-                <p style="color: #888; font-style: italic;">Загрузка...</p>
-            </div>
-        </div>
 
         <!-- Нормативы -->
         <div class="sidebar-section">
@@ -73,12 +49,18 @@
         <p>Справочник по ПУЭ, ГОСТам и электрическим схемам</p>
 
         <button id="theme-toggle">Сменить тему</button>
-
-        <!-- Кнопка типовых схем -->
         <button id="schemes-btn">📋 Типовые схемы</button>
-
-        <!-- Кнопка ИИ -->
         <button id="ai-btn">🤖 Спросить у ИИ</button>
+        <button id="qrcode-btn">📱 Открыть с телефона</button>
+
+        <!-- Лента на главной -->
+        <div class="feed-section">
+            <h3>📢 Сообщество электриков</h3>
+            <button onclick="openPostModal()" class="btn-primary">➕ Опубликовать</button>
+            <div id="feed-container" class="feed-container-main">
+                <p style="color: #888; font-style: italic;">Загрузка...</p>
+            </div>
+        </div>
     </div>
 
     <!-- Модальное окно: типовые схемы -->
@@ -122,6 +104,22 @@
         </div>
     </div>
 
+    <!-- Модальное окно: QR-код -->
+    <div id="qrcode-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📱 Открой с телефона</h3>
+                <span class="close-btn" onclick="closeQRModal()">×</span>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+                <div id="main-qrcode"></div>
+                <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                    Отсканируй, чтобы открыть справочник на телефоне
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Модальное окно: Профиль -->
     <div id="profile-modal" class="modal">
         <div class="modal-content">
@@ -154,7 +152,7 @@
         </div>
     </div>
 
-    <!-- Скрипты — В КОНЦЕ и с defer -->
+    <!-- Подключение скриптов -->
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" defer></script>
     <script src="script.js" defer></script>
 </body>

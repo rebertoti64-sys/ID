@@ -434,4 +434,46 @@ function showGOST50571_5_52() {
 
 function showSettings() {
     alert('⚙️ Настройки скоро будут!');
-}
+}// === Кнопка: показать QR-код ===
+document.addEventListener('DOMContentLoaded', () => {
+    const qrcodeBtn = document.getElementById('qrcode-btn');
+    const qrcodeModal = document.getElementById('qrcode-modal');
+
+    if (qrcodeBtn && qrcodeModal) {
+        qrcodeBtn.addEventListener('click', () => {
+            const qrContainer = document.getElementById('main-qrcode');
+            qrContainer.innerHTML = ''; // очистка
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 200;
+            qrContainer.appendChild(canvas);
+
+            new QRious({
+                element: canvas,
+                value: window.location.href,
+                size: 200,
+                level: 'H',
+                background: '#fff',
+                foreground: '#4a6fa5'
+            });
+
+            qrcodeModal.style.display = 'block';
+        });
+    }
+
+    window.closeQRModal = () => {
+        const modal = document.getElementById('qrcode-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Закрытие при клике вне
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('qrcode-modal');
+        if (e.target === modal) {
+            closeQRModal();
+        }
+    });
+});
