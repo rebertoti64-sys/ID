@@ -13,9 +13,15 @@
 
         <!-- Аватар + имя -->
         <div class="sidebar-header">
-            <img src="https://http.cat/200" alt="Аватар" class="avatar">
-            <h3>Reberto</h3>
-        </div>
+    <img src="https://http.cat/200" alt="Аватар" class="avatar">
+    <h3>Reberto</h3>
+</div>
+
+<!-- QR-код в сайдбаре -->
+<div class="sidebar-section">
+    <h4>📱 Открой с телефона</h4>
+    <div id="sidebar-qrcode" style="text-align: center;"></div>
+</div>
 
         <!-- Поиск по нормативам -->
         <div class="sidebar-search">
@@ -23,9 +29,27 @@
         </div>
 
         <!-- Основное меню -->
-        <a href="#" class="sidebar-link" onclick="showProfile(); return false;">👤 Профиль</a>
+        <a href="#" class="sidebar-link" onclick="openProfileModal(); return false;">👤 Мой профиль</a>
         <a href="#" class="sidebar-link" onclick="showSettings(); return false;">⚙️ Настройки</a>
-
+<!-- Лента активности -->
+<div class="sidebar-section">
+    <h4>📢 Лента сообщества</h4>
+    <button onclick="openPostModal()" style="
+        width: 100%;
+        background: var(--button-bg);
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-bottom: 10px;
+    ">➕ Опубликовать</button>
+    <div id="feed-container">
+        <!-- Посты будут здесь -->
+        <p style="color: #888; font-style: italic;">Загрузка...</p>
+    </div>
+</div>
         <!-- Нормативы -->
         <div class="sidebar-section">
             <h4>📘 Нормативы</h4>
@@ -46,23 +70,6 @@
     <div class="container">
         <h1>📘 ЭлектроСправка</h1>
         <p>Справочник по ПУЭ, ГОСТам и электрическим схемам</p>
-
-        <div class="info-card">
-            <p><strong>Публичный IP:</strong> <span id="ip">Загрузка...</span></p>
-            <p><strong>Время:</strong> <span id="time">--:--:--</span></p>
-            <p><strong>Дата:</strong> <span id="date">Загрузка...</span></p>
-        </div>
-
-        <div class="info-card">
-            <h3>📱 Открой с телефона</h3>
-            <div id="qrcode"></div>
-        </div>
-
-        <div class="info-card">
-            <p><strong>Браузер:</strong> <span id="browser"></span></p>
-            <p><strong>ОС:</strong> <span id="os"></span></p>
-            <p><strong>Разрешение:</strong> <span id="resolution"></span></p>
-        </div>
 
         <button id="theme-toggle">Сменить тему</button>
 
@@ -117,5 +124,36 @@
     <!-- Подключение скриптов -->
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
     <script src="script.js"></script>
+    <!-- Модальное окно: Профиль -->
+<div id="profile-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>👤 Мой профиль</h3>
+            <span class="close-btn" onclick="closeProfileModal()">×</span>
+        </div>
+        <div class="profile-body">
+            <div class="profile-avatar">
+                <img src="https://http.cat/200" alt="Аватар" class="avatar-large">
+            </div>
+            <div class="profile-info">
+                <p><strong>Имя:</strong> <span id="profile-name">Reberto</span></p>
+                <p><strong>IP:</strong> <span id="profile-ip">Загрузка...</span></p>
+                <p><strong>Браузер:</strong> <span id="profile-browser"></span></p>
+                <p><strong>ОС:</strong> <span id="profile-os"></span></p>
+                <p><strong>Разрешение:</strong> <span id="profile-resolution"></span></p>
+                <p><strong>Тема:</strong> <span id="profile-theme">Светлая</span></p>
+            </div>
+            <div class="profile-history">
+                <h4>💬 Последние запросы к ИИ</h4>
+                <ul id="ai-history" class="ai-history-list">
+                    <li>Пока нет запросов</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeProfileModal()" class="btn-close">Закрыть</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

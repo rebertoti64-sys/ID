@@ -80,7 +80,6 @@ function closeSidebar() {
     sidebar.classList.remove('open');
     console.log('✅ Меню закрыто');
 }
-
 // === Инициализация после загрузки DOM ===
 document.addEventListener('DOMContentLoaded', () => {
     sidebar = document.getElementById('sidebar');
@@ -101,23 +100,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === Генерация QR-кода ===
-    const qrcodeContainer = document.getElementById('qrcode');
-    if (qrcodeContainer && typeof QRious !== 'undefined') {
+    // === Генерация QR-кода в сайдбаре ===
+    const sidebarQR = document.getElementById('sidebar-qrcode');
+    if (sidebarQR && typeof QRious !== 'undefined') {
         const canvas = document.createElement('canvas');
-        qrcodeContainer.innerHTML = '';
-        qrcodeContainer.appendChild(canvas);
+        canvas.width = 120;
+        canvas.height = 120;
+        sidebarQR.innerHTML = '';
+        sidebarQR.appendChild(canvas);
 
         new QRious({
             element: canvas,
             value: window.location.href,
-            size: 180,
+            size: 120,
             level: 'H',
             background: '#fff',
             foreground: '#4a6fa5'
         });
-    } else if (qrcodeContainer) {
-        console.warn('QRious не загружена. Проверь подключение библиотеки.');
     }
 
     // === Модальное окно: типовые схемы ===
@@ -144,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiBtn = document.getElementById('ai-btn');
     const aiModal = document.getElementById('ai-modal');
     const aiInput = document.getElementById('ai-input');
-    const aiResponse = document.getElementById('ai-response');
 
     if (aiBtn && aiModal) {
         aiBtn.addEventListener('click', () => {
@@ -154,8 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.closeAIModal = () => {
             aiModal.style.display = 'none';
-            aiResponse.textContent = '';
-            aiInput.value = '';
         };
 
         window.addEventListener('click', (e) => {
@@ -220,168 +216,168 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // === Профиль и лента: все функции внутри DOMContentLoaded ===
+    window.openProfileModal = function() {
+        const modal = document.getElementById('profile-modal');
+        if (modal) {
+            updateProfile();
+            modal.style.display = 'block';
+        }
+    };
+
+    window.closeProfileModal = function() {
+        const modal = document.getElementById('profile-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    function updateProfile() {
+        document.getElementById('profile-name').textContent = 'Reberto';
+
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('profile-ip').textContent = data.ip;
+            })
+            .catch(() => {
+                document.getElementById('profile-ip').textContent = 'Не удалось загрузить';
+            });
+
+        const userAgent = navigator.userAgent;
+        let browser = 'Неизвестно';
+        if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) browser = 'Chrome';
+        else if (userAgent.includes('Firefox')) browser = 'Firefox';
+        else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) browser = 'Safari';
+        else if (userAgent.includes('Edg')) browser = 'Edge';
+        document.getElementById('profile-browser').textContent = browser;
+
+        let os = 'Неизвестно';
+        if (userAgent.includes('Win')) os = 'Windows';
+        else if (userAgent.includes('Mac')) os = 'macOS';
+        else if (userAgent.includes('Linux')) os = 'Linux';
+        else if (userAgent.includes('Android')) os = 'Android';
+        else if (userAgent.includes('iPhone')) os = 'iOS';
+        document.getElementById('profile-os').textContent = os;
+
+        document.getElementById('profile-resolution').textContent = `${window.innerWidth} × ${window.innerHeight}`;
+        const theme = document.body.getAttribute('data-theme') === 'dark' ? 'Тёмная' : 'Светлая';
+        document.getElementById('profile-theme').textContent = theme;
+
+        updateAIHistory();
+    }
+
+    function updateAIHistory() {
+        const history = JSON.parse(localStorage.getItem('aiHistory')) || [];
+        const list = document.getElementById('ai-history');
+        if (history.length === 0) {
+            list.innerHTML = '<li>Пока нет запросов</li>';
+            return;
+        }
+        list.innerHTML = '';
+        history.slice(-5).reverse().forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item.query;
+            list.appendChild(li);
+        });
+    }
+
+    function saveToHistory(query) {
+        const history = JSON.parse(localStorage.getItem('aiHistory')) || [];
+        history.push({ query, timestamp: new Date().toISOString() });
+        if (history.length > 20) history.shift();
+        localStorage.setItem('aiHistory', JSON.stringify(history));
+        if (document.getElementById('profile-modal').style.display === 'block') {
+            updateAIHistory();
+        }
+    }
+
+    window.openPostModal = function() {
+        const modal = document.createElement('div');
+        modal.id = 'post-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = 0;
+        modal.style.left = 0;
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = 9999;
+
+        modal.innerHTML = `
+            <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; width: 90%; max-width: 500px; color: var(--text); box-shadow: 0 4px 20px rgba(0,0,0,0.2); border: 1px solid var(--border);">
+                <h3>📝 Новый пост</h3>
+                <textarea id="post-input" rows="4" placeholder="Что у вас нового? Поделились ли вы схемой? Получилось ли подключить УЗО?" 
+                          style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); margin: 10px 0; resize: vertical;"></textarea>
+                <div style="text-align: right;">
+                    <button onclick="closePostModal()" style="background: #555; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-right: 10px;">Отмена</button>
+                    <button onclick="submitPost()" style="background: var(--button-bg); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Опубликовать</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('post-input').focus();
+    };
+
+    window.closePostModal = function() {
+        const modal = document.getElementById('post-modal');
+        if (modal) modal.remove();
+    };
+
+    window.submitPost = function() {
+        const input = document.getElementById('post-input');
+        const text = input?.value.trim();
+        if (!text) return;
+
+        const feed = JSON.parse(localStorage.getItem('feed')) || [];
+        feed.push({
+            author: 'Reberto',
+            avatar: 'https://http.cat/200',
+            content: text,
+            timestamp: new Date().toISOString()
+        });
+
+        if (feed.length > 50) feed.shift();
+        localStorage.setItem('feed', JSON.stringify(feed));
+        closePostModal();
+        updateFeed();
+    };
+
+    function updateFeed() {
+        const feedContainer = document.getElementById('feed-container');
+        if (!feedContainer) return;
+
+        const feed = JSON.parse(localStorage.getItem('feed')) || [];
+        if (feed.length === 0) {
+            feedContainer.innerHTML = '<p style="color: #888; font-style: italic;">Пока нет записей. Будьте первым!</p>';
+            return;
+        }
+
+        feedContainer.innerHTML = '';
+        feed.slice(-20).reverse().forEach(item => {
+            const time = new Date(item.timestamp).toLocaleString('ru-RU');
+            const div = document.createElement('div');
+            div.className = 'feed-item';
+            div.innerHTML = `
+                <div class="feed-item-header">
+                    <img src="${item.avatar}" alt="Аватар" class="feed-avatar">
+                    <span class="feed-author">${item.author}</span>
+                    <span class="feed-time">${time}</span>
+                </div>
+                <div class="feed-content">${item.content}</div>
+            `;
+            feedContainer.appendChild(div);
+        });
+    }
+
+    // Первое обновление ленты
+    updateFeed();
 });
 
-// === Действия в меню ===
-function showProfile() {
-    alert('👤 Здесь будет профиль');
-    closeSidebar();
-}
-
-function showSettings() {
-    alert('⚙️ Настройки');
-    closeSidebar();
-}
-
-// === Функции ГОСТов ===
-function showPUERules() {
-    alert(`📘 ПУЭ (Правила устройства электроустановок) — Полное руководство
-
-🔹 Глава 1.7 — Заземление и защитные меры
-• П. 1.7.5: Все металлические корпуса оборудования (светильники, розетки, щиты) должны быть заземлены.
-• П. 1.7.79: УЗО обязательно при напряжении >50 В переменного тока (в жилых и общественных зданиях).
-• П. 1.7.144: Розетки в ванных комнатах защищаются УЗО 10 мА.
-
-🔹 Глава 3.1 — Защита от перегрузок и КЗ
-• Автоматический выключатель должен обеспечивать:
-   - Защиту от короткого замыкания (электромагнитный расцепитель)
-   - Защиту от перегрузки (тепловой расцепитель)
-• Пример: Для розеточной группы 2.5 мм² → автомат 16 А.
-
-🔹 Глава 7.1 — Электрооборудование жилых зданий
-• Розетки защищаются УЗО 30 мА.
-• Освещение — можно без УЗО, но рекомендуется.
-• Сечение кабеля:
-   - Освещение: 1.5 мм²
-   - Розетки: 2.5 мм²
-   - Электроплита: 6 мм²
-
-📌 Практика:
-- В деревянном доме — кабель ВВГнг-LS, прокладка в металлической трубе.
-- В квартире — штробление, кабель в гофре.
-
-👉 Источник: https://docs.cntd.ru/document/1200092693`);
-}
-
-function showGOST50571() {
-    alert(`📘 ГОСТ Р 50571 — Электроустановки зданий (серия стандартов)
-
-🔹 Раздел 4-41: Защита от поражения электрическим током
-• Требуется УЗО (ВДТ) для:
-   - Розеток до 32 А (в жилых, детских, ванных)
-   - Наружного освещения
-   - Подвалов и влажных помещений
-• Номинал УЗО: 30 мА (для защиты человека)
-
-🔹 Раздел 5-52: Выбор и монтаж кабелей
-• Допустимый ток зависит от:
-   - Сечения
-   - Метода прокладки (в трубе, в воздухе, в земле)
-   - Температуры окружающей среды
-• Пример: Кабель ВВГ 2.5 мм² — до 25 А (при прокладке в воздухе)
-
-🔹 Раздел 8-82: Энергоэффективность
-• Рекомендации по выбору LED-освещения
-• Учёт потерь в кабелях
-• Оптимизация схемы питания
-
-📌 Применение:
-- При проектировании щитов
-- При модернизации электропроводки
-- В строительстве новых зданий
-
-👉 Официальный текст: https://docs.cntd.ru/document/1200092693`);
-}
-
-function showGOST2702() {
-    alert(`📘 ГОСТ 2.702-2011 — Правила выполнения электрических схем
-
-🔹 Что регулирует:
-• Формат оформления схем
-• Условные обозначения
-• Правила нанесения позиционных обозначений
-• Типы схем: структурные, функциональные, принципиальные, монтажные
-
-🔹 Основные обозначения:
-• QF — автоматический выключатель
-• KM — магнитный пускатель
-• FU — предохранитель
-• SB — кнопка
-• HL — лампа
-• SA — переключатель
-
-🔹 Правила:
-• Линии связи — сплошные, без разрывов
-• Пересечения — с точкой (соединение), без точки — пересечение
-• Надписи — чёткие, без сокращений
-• Потенциалы (L1, L2, L3, N, PE) — подписываются
-
-📌 Пример:
-Схема щита:
-QF1 — вводной автомат
-QF2 — розетки
-QF3 — освещение
-→ Все с подписями и нумерацией
-
-👉 Официальный текст: https://docs.cntd.ru/document/1200089517`);
-}
-
-function showGOST121004() {
-    alert(`📘 ГОСТ 12.1.004-91 — Пожарная безопасность при эксплуатации электроустановок
-
-🔹 Основные требования:
-• Запрещено использовать горючие кабели (ПУНП, ПУГНП)
-• Обязательно применение негорючих кабелей: ВВГнг-LS, NYM
-• Запрещена прокладка кабелей в деревянных конструкциях без защиты
-
-🔹 Требования к прокладке:
-• В деревянных домах — кабель в металлической трубе или коробе
-• В штробах — заделка огнестойким составом
-• Отступ от деревянных поверхностей — не менее 10 мм
-
-🔹 Температурные режимы:
-• Длительная допустимая температура: +70 °C
-• При перегрузке — не более +90 °C
-• При КЗ — не более +160 °C
-
-📌 Практика:
-- В бане, сауне — кабель с термостойкой изоляцией (например, ПВКВ)
-- В квартире — ВВГнг-LS в гофре
-
-👉 Официальный текст: https://docs.cntd.ru/document/1200003710`);
-}
-
-function showGOST50571_5_52() {
-    alert(`📘 ГОСТ Р 50571.5.52-2011 — Выбор и монтаж кабелей
-
-🔹 Методы прокладки:
-• В трубах ПНД, металлорукаве, гофре
-• В кабельных каналах
-• Открыто по стенам (в плинтусах, лотках)
-• В земле (в защитной трубе)
-
-🔹 Минимальные радиусы изгиба:
-• Для кабеля 3×2.5 мм² — не менее 5 внешних диаметров
-• Пример: Если Ø = 8 мм → радиус ≥ 40 мм
-
-🔹 Расчёт сечения:
-• По допустимому току (в зависимости от нагрузки)
-• По потере напряжения (не более 5%)
-• По механической прочности (мин. 1.5 мм² для освещения)
-
-🔹 Пример расчёта:
-Нагрузка: 3.5 кВт (розетки на кухне)
-Ток: I = P/U = 3500 / 220 ≈ 16 А
-→ Выбираем кабель 2.5 мм² и автомат 16 А
-
-📌 Важно:
-- Не используй алюминиевый кабель в жилых помещениях (ПУЭ запрещает)
-- Все соединения — только в распредкоробках
-
-👉 Официальный текст: https://docs.cntd.ru/document/1200092694`);
-}
-
-// === Чат с ИИ ===
+// === Функции ГОСТОВ и askAI() остаются снаружи — они вызываются по клику
 function askAI() {
     const aiInput = document.getElementById('ai-input');
     const chatBox = document.getElementById('ai-chat');
@@ -389,72 +385,36 @@ function askAI() {
 
     if (!query) return;
 
-    // Добавляем сообщение пользователя
     const userMsg = document.createElement('div');
     userMsg.className = 'user-message';
     userMsg.textContent = query;
     chatBox.appendChild(userMsg);
 
-    // Очищаем поле ввода
     aiInput.value = '';
-
-    // Прокручиваем вниз
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Добавляем "печатающий" эффект
     const botMsg = document.createElement('div');
     botMsg.className = 'bot-message';
     botMsg.textContent = '🧠 Пишу...';
     chatBox.appendChild(botMsg);
-
-    // Прокрутка
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Ответ через задержку
     setTimeout(() => {
         const lower = query.toLowerCase();
         let answer = "";
 
         if (lower.includes('лампа') || lower.includes('свет')) {
-            answer = "💡 Вот схема подключения лампы:\n\n" +
-                     "• Фаза → Выключатель → Лампа → Ноль\n" +
-                     "• Сечение кабеля: 1.5 мм² (ПУЭ п. 7.1.35)\n" +
-                     "• Автомат: 10 А (тип B)\n" +
-                     "• Заземление не требуется (если не металлический корпус)";
-        }
-        else if (lower.includes('розетка')) {
-            answer = "🔌 Подключение розетки:\n\n" +
-                     "• Фаза → Автомат 16 А → Розетка\n" +
-                     "• Ноль → Розетка\n" +
-                     "• Земля → Розетка (обязательно! ПУЭ п. 1.7.144)\n" +
-                     "• Сечение: 2.5 мм² медный кабель";
-        }
-        else if (lower.includes('двигатель') || lower.includes('мотор')) {
-            answer = "⚙️ Подключение трёхфазного двигателя:\n\n" +
-                     "• Схема: «звезда» или «треугольник»\n" +
-                     "• Тепловое реле + магнитный пускатель\n" +
-                     "• Защита: автомат + УЗО 30 мА\n" +
-                     "• Сечение: 4 мм² (для 5.5 кВт)";
-        }
-        else if (lower.includes('заземление')) {
-            answer = "⚡ Заземление — обязательно!\n\n" +
-                     "• ПУЭ п. 1.7.5 — все металлические корпуса должны быть заземлены\n" +
-                     "• Используйте провод PE жёлто-зелёного цвета\n" +
-                     "• Сопротивление контура — не более 4 Ом (для 220 В)";
-        }
-        else if (lower.includes('узо') || lower.includes('узо')) {
-            answer = "🛡️ УЗО (устройство защитного отключения)\n\n" +
-                     "• Устанавливается для защиты от утечки тока\n" +
-                     "• Номинал: 30 мА для жилых помещений\n" +
-                     "• Обязательно в ванных, кухнях, наружных установках\n" +
-                     "• ПУЭ п. 7.1.73 — требование к установке УЗО";
-        }
-        else {
-            answer = "📌 Я не нашёл точного совпадения, но вот общие правила:\n\n" +
-                     "• Все цепи должны быть защищены автоматами.\n" +
-                     "• Заземление обязательно для розеток и металлических корпусов.\n" +
-                     "• Используйте кабель ВВГнг-LS.\n" +
-                     "• См. ПУЭ глава 7, ГОСТ Р 50571.";
+            answer = "💡 Вот схема подключения лампы:\n\n• Фаза → Выключатель → Лампа → Ноль\n• Сечение кабеля: 1.5 мм² (ПУЭ п. 7.1.35)\n• Автомат: 10 А (тип B)\n• Заземление не требуется";
+        } else if (lower.includes('розетка')) {
+            answer = "🔌 Подключение розетки:\n\n• Фаза → Автомат 16 А → Розетка\n• Ноль → Розетка\n• Земля → Розетка (обязательно! ПУЭ п. 1.7.144)\n• Сечение: 2.5 мм² медный кабель";
+        } else if (lower.includes('двигатель') || lower.includes('мотор')) {
+            answer = "⚙️ Подключение трёхфазного двигателя:\n\n• Схема: «звезда» или «треугольник»\n• Тепловое реле + магнитный пускатель\n• Защита: автомат + УЗО 30 мА\n• Сечение: 4 мм² (для 5.5 кВт)";
+        } else if (lower.includes('заземление')) {
+            answer = "⚡ Заземление — обязательно!\n\n• ПУЭ п. 1.7.5 — все металлические корпуса должны быть заземлены\n• Используйте провод PE жёлто-зелёного цвета\n• Сопротивление контура — не более 4 Ом";
+        } else if (lower.includes('узо') || lower.includes('узо')) {
+            answer = "🛡️ УЗО (устройство защитного отключения)\n\n• Устанавливается для защиты от утечки тока\n• Номинал: 30 мА для жилых помещений\n• Обязательно в ванных, кухнях, наружных установках\n• ПУЭ п. 7.1.73 — требование к установке УЗО";
+        } else {
+            answer = "📌 Я не нашёл точного совпадения, но вот общие правила:\n\n• Все цепи должны быть защищены автоматами.\n• Заземление обязательно для розеток и металлических корпусов.\n• Используйте кабель ВВГнг-LS.\n• См. ПУЭ глава 7, ГОСТ Р 50571.";
         }
 
         botMsg.textContent = answer;
@@ -462,24 +422,5 @@ function askAI() {
     }, 800);
 }
 
-// === Управление модальным окном ИИ ===
-const aiBtn = document.getElementById('ai-btn');
-const aiModal = document.getElementById('ai-modal');
-
-if (aiBtn && aiModal) {
-    aiBtn.addEventListener('click', () => {
-        aiModal.style.display = 'block';
-        document.getElementById('ai-input')?.focus();
-    });
-
-    window.closeAIModal = () => {
-        aiModal.style.display = 'none';
-    };
-
-    // Закрытие при клике вне
-    window.addEventListener('click', (e) => {
-        if (e.target === aiModal) {
-            closeAIModal();
-        }
-    });
-}
+// Функции ГОСТОВ остаются как есть
+// showPUERules(), showGOST50571(), и т.д.

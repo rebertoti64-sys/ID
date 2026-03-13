@@ -495,4 +495,110 @@ button:hover {
 
 #ai-submit:hover {
     background-color: var(--button-hover);
+}/* === Профиль === */
+.profile-body {
+    padding: 15px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.profile-avatar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--button-bg);
+}
+
+.profile-info {
+    background-color: var(--bg);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--button-bg);
+}
+
+.profile-info p {
+    margin: 8px 0;
+}
+
+.profile-history {
+    background-color: var(--bg);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4a6fa5;
+}
+
+.profile-history h4 {
+    margin: 0 0 10px;
+    color: var(--button-bg);
+    font-size: 16px;
+}
+
+.ai-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.ai-history-list li {
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 13px;
+}
+
+.ai-history-list li:last-child {
+    border-bottom: none;
+}/* === Лента постов === */
+.feed-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px var(--shadow);
+}
+
+.feed-item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.feed-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--button-bg);
+}
+
+.feed-author {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 15px;
+}
+
+.feed-time {
+    font-size: 12px;
+    color: #888;
+    margin-left: auto;
+}
+
+.feed-content {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 8px 0;
 }
